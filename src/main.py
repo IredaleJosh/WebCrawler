@@ -6,12 +6,12 @@ import sys
 import os
 
 # SAVE TO JSON FILE
-def save_as_index(indexed, filename="index.json"):
+def save_as_index(indexed, filename="../data/index.json"):
     with open(filename, "w") as f:
-        json.dump(indexed, f)
+        json.dump(indexed, f, indent=4)
 
 # LOAD THE JSON FILE
-def load_index(filename="index.json"):
+def load_index(filename="../data/index.json"):
     if not os.path.exists(filename):
         print("No index found: Please run 'build' before using 'load'")
         return
@@ -66,7 +66,8 @@ Welcome to Web Crawler - How to Use:
                 print("Invalid Command: Please choose a word to be printed. Try Again")
                 continue
             word = cmd[1]
-            print(print_word(indexed, word))
+            result = print_word(indexed, word)
+            print(json.dumps(result, indent=4))
 
         elif choice == "find":
             if indexed is None:
@@ -76,7 +77,8 @@ Welcome to Web Crawler - How to Use:
                 print("Invalid Command: Please choose a phrase to locate. Try Again")
                 continue
             phrase = cmd[1]
-            print(find_word(indexed, phrase))
+            result = print_word(indexed, phrase)
+            print(json.dumps(result, indent=4))
 
         else:
             print("Unknown commands. Try Again")
