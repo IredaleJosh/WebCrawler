@@ -1,5 +1,6 @@
 from crawler import crawl_site
 from indexer import build_indexer
+from search import print_word, find_word
 import json
 import sys
 import os
@@ -13,38 +14,73 @@ def save_as_index(indexed, filename="index.json"):
 def load_index(filename="index.json"):
     if not os.path.exists(filename):
         print("No index found: Please run 'build' before using 'load'")
+        return
     with open(filename, "r") as f:
         return json.load(f)
 
-# MAIN - CHECKS CMD
-def main():
-    # CCONFIRM CMD IS SAVED
-    if len(sys.argv) < 2:
-        print("Please use commands")
-        print("build - crawl website, build index and save resulting index") 
-        print("load - loads the index file, requires 'build' to be ran first")
-        return
-    cmd = sys.argv[1]
+# MAIN LOOP
+def program_loop():
 
-    if cmd == "build":
-        # CRAWL THE PAGES + INDEX + SAVE
-        pages = crawl_site("https://quotes.toscrape.com")
-        indexed =  build_indexer(pages)
-        save_as_index(indexed)
-        print("CRAWLED, INDEXED AND SAVED")
+    indexed = None
 
-    if cmd == "load":
-        indexed = load_index()
-        if indexed is None:
-            return
+    # Explain structure
+    print("""
+Welcome to Web Crawler - How to Use:
+    build - crawl website, build and save index of website\n
+    load - loads the index file, requires 'build' to be ran first\n
+    print <word> - prints the index for a particular word\n
+    find <phrase> - finds a given phrase in index\n
+    close - exit crawler""")
+
+    while True:
+        cmd = input("> ").strip().split()
+
+        if not cmd:
+            print("No command given. Try Agaim")
+            continue
+
+        choice = cmd[0]
+
+        if choice == "close":
+            print("Exit Program")
+            break;
+
+        elif choice == "build":
+            pages = crawl_site("https://quotes.toscrape.com")
+            indexed =  build_indexer(pages)
+            save_as_index(indexed)
+            print("Crawled Website, and Saved Index of Page")
+
+        elif choice == "load":
+            indexed = load_index()
+            if indexed is None:
+                continue
+            else:
+                print("Index Loaded")
+
+        elif choice == "print":
+            if indexed is None:
+                print("Invalid Order: Load must be called before. Try Again")
+                continue
+            if len(choice) < 2:
+                print("Invalid Command: Please choose a word to be printed. Try Again")
+                continue
+            word = cmd[1]
+            print(print_word(indexed, word))
+
+        elif choice == "find":
+            if indexed is None:
+                print("Invalid Order: Load must be called before. Try Again")
+                continue
+            if len(choice) < 2:
+                print("Invalid Command: Please choose a phrase to locate. Try Again")
+                continue
+            phrase = cmd[1]
+            print(find_word(indexed, phrase))
+
         else:
-            print("LOAD INDEXD PAGES")
-
-    # if cmd == "print":
-
-
+            print("Unknown commands. Try Again")
 
 # Main Function
 if __name__ == "__main__":
-    main()
-
+    program_loop()
