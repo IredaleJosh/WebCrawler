@@ -13,4 +13,4 @@ def find_word(index, query):
             sets.append(set(index[word].keys()))
         else:
             return []
-    return list(set.intersection(*sets))
+    return list(set.intersection(*sets)) 

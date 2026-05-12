@@ -17,7 +17,7 @@ def get_quotes(soup):
     authors = soup.find_all("small", class_="author")
     page_text = []
     for q, a in zip(quotes, authors):
-        page_text.append(q.text + " - " + a.text)
+        page_text.append(q.get_text(strip=True) + " - " + a.get_text(strip=True))
     return " ".join(page_text)
 
 # Find next page

@@ -59,10 +59,11 @@ Welcome to Web Crawler - How to Use:
                 print("Index Loaded")
 
         elif choice == "print":
+            print(len(choice))
             if indexed is None:
                 print("Invalid Order: Load must be called before. Try Again")
                 continue
-            if len(choice) < 2:
+            if len(cmd) == 1:
                 print("Invalid Command: Please choose a word to be printed. Try Again")
                 continue
             word = cmd[1]
@@ -73,11 +74,11 @@ Welcome to Web Crawler - How to Use:
             if indexed is None:
                 print("Invalid Order: Load must be called before. Try Again")
                 continue
-            if len(choice) < 2:
+            if len(cmd) == 1:
                 print("Invalid Command: Please choose a phrase to locate. Try Again")
                 continue
             phrase = cmd[1]
-            result = print_word(indexed, phrase)
+            result = find_word(indexed, phrase)
             print(json.dumps(result, indent=4))
 
         else:
