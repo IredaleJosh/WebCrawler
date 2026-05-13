@@ -12,6 +12,7 @@ def get_page(url):
     return BeautifulSoup(response.text, "html.parser")
 
 # Extract quotes from the page, combining texts and authors
+# stores in format with url, quotes, raw text and next page
 def get_quotes(soup):
     quotes = soup.find_all("span", class_="text")
     authors = soup.find_all("small", class_="author")
@@ -31,12 +32,28 @@ def get_next_page(soup):
 # get start page, extract quotes and authors and repeat for each page
 def crawl_site(start):
     url = start
-    total_pages = {}
+    total_pages = []
     while url:
         print(f"Fetching: {url}")
+
         page = get_page(url) 
-        total_pages[url] = get_quotes(page)
+        quotes = get_quotes(page)
+        curr_url = url
+        url = get_next_page(page)
+
+        total_pages.append({
+            "page" : curr_url,
+            "text": quotes,
+            "next page" : url
+        })
         print("Waiting 6 Seconds")
         time.sleep(6) # POLITNESS WINDOW
-        url = get_next_page(page)
     return total_pages
+
+# crawl a single page
+def crawl_single_page(start):
+    single_page = {}
+    print(f"Fetching: {start}")
+    page = get_page(start)
+    single_page[start] = get_quotes(page)
+    return single_page

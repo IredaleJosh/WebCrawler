@@ -68,7 +68,17 @@ Welcome to Web Crawler - How to Use:
                 continue
             word = cmd[1]
             result = print_word(indexed, word)
-            print(json.dumps(result, indent=4))
+            # NICER FORMAT
+            if not result:
+                print(f"No results found for term: {word}")
+            else:
+                print(f"Results for term: {word}")
+                for url, data in result.items():
+                    freq = data["frequency"]
+                    pos = " , ".join(str(p) for p in data["positions"])
+                    print(f" -Page: {url}")
+                    print(f" Frequency: {freq}")
+                    print(f" Position: {pos}\n")
 
         elif choice == "find":
             if indexed is None:
@@ -77,7 +87,7 @@ Welcome to Web Crawler - How to Use:
             if len(cmd) == 1:
                 print("Invalid Command: Please choose a phrase to locate. Try Again")
                 continue
-            phrase = cmd[1]
+            phrase = cmd[1:]
             result = find_word(indexed, phrase)
             print(json.dumps(result, indent=4))
 

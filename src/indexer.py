@@ -16,11 +16,11 @@ def tokenise(text):
     # MUST BE CREATED BY THE TOOL AS IT CRAWLS THE PAGES OF THE WEBSITES
 def build_indexer(pages):
     index = {}
-
-    for url, text in pages.items():
-        words = tokenise(text)
-
-        for position, word in enumerate(words):
+    for page in pages:
+        url = page["page"]
+        text = page["text"]
+        word = tokenise(text)
+        for position, word in enumerate(word):
             if word not in index:
                 index[word] = {}
             if url not in index[word]:
