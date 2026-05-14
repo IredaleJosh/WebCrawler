@@ -33,14 +33,21 @@ def get_next_page(soup):
 def crawl_site(start):
     url = start
     total_pages = []
+    # Check for Error Codes
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("HERE")
+        return total_pages
     while url:
         print(f"Fetching: {url}")
-
+        # Main
         page = get_page(url) 
         quotes = get_quotes(page)
         curr_url = url
         url = get_next_page(page)
-
+        # Infinite Loop
+        if url == curr_url:
+            url = None
         total_pages.append({
             "page" : curr_url,
             "text": quotes,

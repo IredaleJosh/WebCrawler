@@ -17,8 +17,8 @@ class CrawlerTest(unittest.TestCase):
         </div>
         """
         mock_get.return_value = mock_response
-
         result = crawl_site("https://quotes.toscrape.com")
+
         self.assertIn("hello world - author", result[0]["text"].lower())
         self.assertEqual(result[0]["page"], "https://quotes.toscrape.com")
     
@@ -36,25 +36,63 @@ class CrawlerTest(unittest.TestCase):
 
         self.assertEqual(pages[0]["text"], "")
 
-    # # TEST NEXT PAGE IS ACQUIRED
-    # @patch("src.crawler.requests.get")
-    # @patch("time.sleep", return_value=None)
-    # def test_next_page(self, mock_sleep, mock_get):
-    #     mock_response = Mock()
-    #     mock_response.status_code = 200
-    #     mock_response.text = """
-    #     <li class="next"><a href="/page/2/">Next</a></li>
-    #     """
-    #     mock_get.return_value = mock_response
-    #     pages = crawl_site("https://quotes.toscrape.com")
+    # TEST NEXT PAGE IS ACQUIRED
+    @patch("src.crawler.requests.get")
+    @patch("time.sleep", return_value=None)
+    def test_next_page(self, mock_sleep, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.text = """
+        <li class="next"><a href="/page/2/">Next</a></li>
+        """
+        mock_get.return_value = mock_response
+        pages = crawl_site("https://quotes.toscrape.com")
 
-    #     self.assertEqual(pages[0]["next page"], "https://quotes.toscrape.com/page/2")
+        self.assertEqual(pages[0]["next page"], "https://quotes.toscrape.com/page/2/")
 
-    # TEST STOPS WHEN NO MORE PAGES
 
-    # TEST HANDLING OF HTTP ERRORS
+    # TEST BROKEN HTML TAGS
+    @patch("src.crawler.requests.get")
+    @patch("time.sleep", return_value=None)
+    def test_broken_html(self, mock_sleep, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.text = """
+        <div class="quote">
+            <span class="text">Hello World
+        """
+        mock_get.return_value = mock_response
+        pages = crawl_site("https://quotes.toscrape.com")
 
-    # TEST BROKEN HTML
+        self.assertEqual(pages[0]["text"], "")
+
+    # TEST HANDLING MISSING HTML
+    @patch("src.crawler.requests.get")
+    @patch("time.sleep", return_value=None)
+    def test_missing_html(self, mock_sleep, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.text = """
+        <div> Hello World </div>
+        """
+        mock_get.return_value = mock_response
+        pages = crawl_site("https://quotes.toscrape.com")
+
+        self.assertEqual(pages[0]["text"], "")
+
+    # HTTP ERROR CODE
+    @patch("src.crawler.requests.get")
+    @patch("time.sleep", return_value=None)
+    def test_missing_html(self, mock_sleep, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.text = """
+        Not Found
+        """
+        mock_get.return_value = mock_response
+        pages = crawl_site("https://quotes.toscrape.com")
+
+        self.assertEqual(pages, [])
 
 if __name__ == "__main__":
     unittest.main()
