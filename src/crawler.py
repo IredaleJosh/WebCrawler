@@ -36,7 +36,6 @@ def crawl_site(start):
     # Check for Error Codes
     response = requests.get(url)
     if response.status_code != 200:
-        print("HERE")
         return total_pages
     while url:
         print(f"Fetching: {url}")

@@ -47,6 +47,7 @@ Welcome to Web Crawler - How to Use:
 
         elif choice == "build":
             pages = crawl_site("https://quotes.toscrape.com")
+            print(pages[:300])
             indexed =  build_indexer(pages)
             save_as_index(indexed)
             print("Crawled Website, and Saved Index of Page")

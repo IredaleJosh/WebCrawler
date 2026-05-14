@@ -2,18 +2,14 @@
 # SHOWS WHICH WORD APPEARS ON WHICH PAGE, HOW OFTEN AND WHERE
 import re
 
-# 1. RECEIVE CRAWLER
-    # takes dictionary as input
-
-# 2. TOKENISE THE TEXT/ SPLIT THE WORD AND STORE AS LOWER CASE
-    # ENSURES CASE SENSITIVITY
+# TOKENISE THE TEXT/ SPLIT THE WORD AND STORE AS LOWER CASE
 def tokenise(text):
+    if not isinstance(text, str):
+        return []
     words = re.findall(r"\b\w+\b", text.lower())
     return words
 
-# 3. BUILD INVERTED INDEX
-    # STORES STATS LIKE FREQUENCY, POSITION ECT. OF EACH WORD IN EACH PAGE
-    # MUST BE CREATED BY THE TOOL AS IT CRAWLS THE PAGES OF THE WEBSITES
+# BUILD INVERTED INDEX
 def build_indexer(pages):
     index = {}
     for page in pages:
