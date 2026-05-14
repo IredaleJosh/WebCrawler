@@ -36,7 +36,7 @@ Welcome to Web Crawler - How to Use:
         cmd = input("> ").strip().split()
 
         if not cmd:
-            print("No command given. Try Agaim")
+            print("No command given. Try Again\n")
             continue
 
         choice = cmd[0]
@@ -47,50 +47,57 @@ Welcome to Web Crawler - How to Use:
 
         elif choice == "build":
             pages = crawl_site("https://quotes.toscrape.com")
-            print(pages[:300])
             indexed =  build_indexer(pages)
             save_as_index(indexed)
-            print("Crawled Website, and Saved Index of Page")
+            print("Crawled Website, and Saved Index of Page\n")
 
         elif choice == "load":
             indexed = load_index()
             if indexed is None:
                 continue
             else:
-                print("Index Loaded")
+                print("Index Loaded\n")
 
         elif choice == "print":
-            print(len(choice))
             if indexed is None:
-                print("Invalid Order: Load must be called before. Try Again")
+                print("Invalid Order: Load must be called before. Try Again\n")
                 continue
             if len(cmd) == 1:
-                print("Invalid Command: Please choose a word to be printed. Try Again")
+                print("Invalid Command: Please choose a word to be printed. Try Again\n")
+                continue
+            if len(cmd) > 2:
+                print("Invalid Command: Too many words, Please choose one. Try Again\n")
                 continue
             word = cmd[1]
             result = print_word(indexed, word)
             # NICER FORMAT
             if not result:
-                print(f"No results found for term: {word}")
+                print(f"No results found for term: {word}\n")
             else:
                 print(f"Results for term: {word}")
                 for url, data in result.items():
                     freq = data["frequency"]
-                    pos = " , ".join(str(p) for p in data["positions"])
+                    pos = ", ".join(str(p) for p in data["positions"])
                     print(f" -Page: {url}")
                     print(f" Frequency: {freq}")
                     print(f" Position: {pos}\n")
 
         elif choice == "find":
             if indexed is None:
-                print("Invalid Order: Load must be called before. Try Again")
+                print("Invalid Order: Load must be called before. Try Again\n")
                 continue
             if len(cmd) == 1:
-                print("Invalid Command: Please choose a phrase to locate. Try Again")
+                print("Invalid Command: Please choose a phrase to locate. Try Again\n")
                 continue
             phrase = cmd[1:]
             result = find_word(indexed, phrase)
-            print(json.dumps(result, indent=4))
+            # NICER FORMAT
+            if not result:
+                print(f"No Pages for phrase: {" ".join(phrase)}\n")
+            else:
+                print(f"Pages shared for phrase: {" ".join(phrase)}\n")
+                for page in result:
+                    print(f"  -{page}")
 
         else:
             print("Unknown commands. Try Again")

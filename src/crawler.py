@@ -38,7 +38,7 @@ def crawl_site(start):
     if response.status_code != 200:
         return total_pages
     while url:
-        print(f"Fetching: {url}")
+        print(f"   -Crawling: {url}")
         # Main
         page = get_page(url) 
         quotes = get_quotes(page)
@@ -52,7 +52,6 @@ def crawl_site(start):
             "text": quotes,
             "next page" : url
         })
-        print("Waiting 6 Seconds")
         time.sleep(6) # POLITNESS WINDOW
     return total_pages
 
