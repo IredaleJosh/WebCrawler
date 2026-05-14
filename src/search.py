@@ -7,7 +7,7 @@ def print_word(index, word):
     word = word.lower()
     return index.get(word, {})
 
-def find_word(index, query):
+def find_phrase(index, query):
     # MUST BE A LIST
     if not isinstance(query, list):
         return []

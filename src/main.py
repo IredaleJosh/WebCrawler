@@ -1,8 +1,7 @@
 from crawler import crawl_site
 from indexer import build_indexer
-from search import print_word, find_word
+from search import print_word, find_phrase
 import json
-import sys
 import os
 
 # SAVE TO JSON FILE
@@ -90,7 +89,7 @@ Welcome to Web Crawler - How to Use:
                 print("Invalid Command: Please choose a phrase to locate. Try Again\n")
                 continue
             phrase = cmd[1:]
-            result = find_word(indexed, phrase)
+            result = find_phrase(indexed, phrase)
             # NICER FORMAT
             if not result:
                 print(f"No Pages for phrase: {" ".join(phrase)}\n")
